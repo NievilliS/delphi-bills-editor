@@ -57,7 +57,6 @@ object BillEditor: TBillEditor
         ParentFont = False
         ShowCaption = False
         TabOrder = 1
-        ExplicitWidth = 950
         DesignSize = (
           954
           257)
@@ -66,6 +65,7 @@ object BillEditor: TBillEditor
           Top = 88
           Width = 91
           Height = 15
+          Alignment = taRightJustify
           Caption = 'Sum in Selection:'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clWindowText
@@ -101,11 +101,12 @@ object BillEditor: TBillEditor
           ParentFont = False
         end
         object SumLabelDiff: TLabel
-          Left = 16
+          Left = 15
           Top = 169
-          Width = 22
+          Width = 92
           Height = 15
-          Caption = 'Diff:'
+          Alignment = taRightJustify
+          Caption = 'Difference above:'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clWindowText
           Font.Height = -12
@@ -135,7 +136,6 @@ object BillEditor: TBillEditor
           Date = 45432.000000000000000000
           TabOrder = 0
           OnClick = OverviewDateClick
-          ExplicitLeft = 718
         end
         object OverviewClearDate: TButton
           Left = 722
@@ -152,7 +152,6 @@ object BillEditor: TBillEditor
           ParentFont = False
           TabOrder = 1
           OnClick = OverviewDateClick
-          ExplicitLeft = 718
         end
         object QueryFilterEdit: TEdit
           Left = 16
@@ -169,7 +168,6 @@ object BillEditor: TBillEditor
           TabOrder = 2
           TextHint = 'Price > 10 AND Name = "Spar"'
           OnKeyPress = QueryFilterEditKeyPress
-          ExplicitWidth = 678
         end
         object QFilterApply: TButton
           Left = 16
@@ -231,7 +229,6 @@ object BillEditor: TBillEditor
         Caption = 'EBETopP'
         ShowCaption = False
         TabOrder = 0
-        ExplicitWidth = 985
         DesignSize = (
           954
           193)
@@ -247,21 +244,20 @@ object BillEditor: TBillEditor
         object BEDateLabel: TLabel
           Left = 338
           Top = 61
-          Width = 316
+          Width = 153
           Height = 15
           AutoSize = False
           Caption = 'Date'
         end
         object BEPriceLabel: TLabel
-          Left = 672
+          Left = 728
           Top = 61
-          Width = 266
+          Width = 210
           Height = 15
-          Anchors = [akLeft, akTop, akRight]
+          Anchors = [akTop, akRight]
           AutoSize = False
           Caption = 'Price'
           FocusControl = BEPriceEdit
-          ExplicitWidth = 316
         end
         object BEStoreIDRefLabel: TLabel
           Left = 16
@@ -300,6 +296,14 @@ object BillEditor: TBillEditor
           Caption = 'Address'
           ExplicitLeft = 547
         end
+        object BEGroupLabel: TLabel
+          Left = 497
+          Top = 61
+          Width = 225
+          Height = 15
+          AutoSize = False
+          Caption = 'Group'
+        end
         object DebugVisiToggler: TPanel
           Left = -4
           Top = 82
@@ -309,7 +313,7 @@ object BillEditor: TBillEditor
           Caption = 'DebugVisiToggler'
           ParentColor = True
           ShowCaption = False
-          TabOrder = 9
+          TabOrder = 10
           OnDblClick = DebugVisiTogglerDblClick
         end
         object EBETopButtonsP: TPanel
@@ -320,8 +324,7 @@ object BillEditor: TBillEditor
           Align = alTop
           Caption = 'ESETopButtonsP'
           ShowCaption = False
-          TabOrder = 0
-          ExplicitWidth = 985
+          TabOrder = 1
           object EBETopStackP: TStackPanel
             AlignWithMargins = True
             Left = 694
@@ -350,7 +353,6 @@ object BillEditor: TBillEditor
             Spacing = 30
             TabOrder = 0
             VerticalPositioning = spvpTop
-            ExplicitLeft = 725
             object BEBillsSaveButton: TButton
               Left = 15
               Top = 0
@@ -382,7 +384,6 @@ object BillEditor: TBillEditor
             Constraints.MinWidth = 200
             ShowCaption = False
             TabOrder = 1
-            ExplicitWidth = 721
             object DBNavigator1: TDBNavigator
               Left = 205
               Top = 2
@@ -392,7 +393,6 @@ object BillEditor: TBillEditor
               Align = alCustom
               Anchors = []
               TabOrder = 0
-              ExplicitLeft = 221
             end
           end
         end
@@ -403,19 +403,18 @@ object BillEditor: TBillEditor
           Height = 23
           DataField = 'BillID'
           DataSource = BillsDataSource
-          TabOrder = 1
+          TabOrder = 2
         end
         object BEPriceEdit: TDBEdit
-          Left = 668
+          Left = 728
           Top = 82
-          Width = 266
+          Width = 206
           Height = 23
-          Anchors = [akLeft, akTop, akRight]
+          Anchors = [akTop, akRight]
           Constraints.MinWidth = 60
           DataField = 'Price'
           DataSource = BillsDataSource
-          TabOrder = 2
-          ExplicitWidth = 297
+          TabOrder = 5
         end
         object BEStoreIDRefEdit: TDBEdit
           Left = 16
@@ -424,7 +423,7 @@ object BillEditor: TBillEditor
           Height = 23
           DataField = 'StoreID'
           DataSource = BillsDataSource
-          TabOrder = 3
+          TabOrder = 6
           OnChange = BEStoreIDRefEditChange
         end
         object BENameDisplay: TEdit
@@ -433,7 +432,7 @@ object BillEditor: TBillEditor
           Width = 136
           Height = 23
           Enabled = False
-          TabOrder = 4
+          TabOrder = 7
           Text = 'BENameDisplay'
         end
         object BELocationDisplay: TEdit
@@ -444,9 +443,8 @@ object BillEditor: TBillEditor
           Anchors = [akLeft, akTop, akRight]
           Constraints.MinWidth = 100
           Enabled = False
-          TabOrder = 5
+          TabOrder = 8
           Text = 'BELocationDisplay'
-          ExplicitWidth = 205
         end
         object BEAddressDisplay: TEdit
           Left = 494
@@ -455,18 +453,17 @@ object BillEditor: TBillEditor
           Height = 23
           Anchors = [akTop, akRight]
           Enabled = False
-          TabOrder = 6
+          TabOrder = 9
           Text = 'BEAddressDisplay'
-          ExplicitLeft = 525
         end
         object BEDateTimePicker: TDateTimePicker
           Left = 338
           Top = 82
-          Width = 328
+          Width = 153
           Height = 23
           Date = 45370.000000000000000000
           Time = 45370.000000000000000000
-          TabOrder = 7
+          TabOrder = 3
         end
         object btnDebugFallback: TButton
           Left = 817
@@ -475,10 +472,19 @@ object BillEditor: TBillEditor
           Height = 25
           Anchors = [akTop, akRight]
           Caption = 'DEBUG FallbackWND'
-          TabOrder = 8
+          TabOrder = 0
+          TabStop = False
           Visible = False
           OnClick = btnDebugFallbackClick
-          ExplicitLeft = 848
+        end
+        object BEGroupEdit: TDBEdit
+          Left = 497
+          Top = 82
+          Width = 225
+          Height = 23
+          DataField = 'Group'
+          DataSource = BillsDataSource
+          TabOrder = 4
         end
       end
       object BEDBGrid: TDBGrid
@@ -526,7 +532,6 @@ object BillEditor: TBillEditor
         Constraints.MinWidth = 200
         ShowCaption = False
         TabOrder = 1
-        ExplicitWidth = 985
         object ESETopButtonsP: TPanel
           Left = 0
           Top = 0
@@ -536,7 +541,6 @@ object BillEditor: TBillEditor
           Caption = 'ESETopButtonsP'
           ShowCaption = False
           TabOrder = 0
-          ExplicitWidth = 985
           object ESETopStackP: TStackPanel
             AlignWithMargins = True
             Left = 694
@@ -565,7 +569,6 @@ object BillEditor: TBillEditor
             Spacing = 30
             TabOrder = 0
             VerticalPositioning = spvpTop
-            ExplicitLeft = 725
             object SEStoreSaveButton: TButton
               Left = 15
               Top = 0
@@ -597,7 +600,6 @@ object BillEditor: TBillEditor
             Constraints.MinWidth = 200
             ShowCaption = False
             TabOrder = 1
-            ExplicitWidth = 721
             object SEStoreNavigator: TDBNavigator
               Left = 205
               Top = 2
@@ -607,7 +609,6 @@ object BillEditor: TBillEditor
               Align = alCustom
               Anchors = []
               TabOrder = 0
-              ExplicitLeft = 221
             end
           end
         end
@@ -633,7 +634,7 @@ object BillEditor: TBillEditor
           object SEStoreIDLabel: TLabel
             Left = 0
             Top = 20
-            Width = 100
+            Width = 145
             Height = 15
             Anchors = [akLeft]
             AutoSize = False
@@ -680,7 +681,6 @@ object BillEditor: TBillEditor
           Constraints.MinWidth = 350
           ShowCaption = False
           TabOrder = 2
-          ExplicitWidth = 757
           DesignSize = (
             726
             144)
@@ -714,7 +714,6 @@ object BillEditor: TBillEditor
             DataField = 'Location'
             DataSource = StoresDataSource
             TabOrder = 0
-            ExplicitWidth = 739
           end
           object SEAddressEdit: TDBEdit
             Left = 3
@@ -725,11 +724,121 @@ object BillEditor: TBillEditor
             DataField = 'Address'
             DataSource = StoresDataSource
             TabOrder = 1
-            ExplicitWidth = 739
           end
         end
       end
     end
+    object SettingsPage: TTabSheet
+      Caption = '&Settings'
+      ImageIndex = 3
+      object BSTIPLabel: TLabel
+        Left = 43
+        Top = 19
+        Width = 55
+        Height = 15
+        Alignment = taRightJustify
+        Caption = 'IP Address'
+      end
+      object BSTUserLabel: TLabel
+        Left = 45
+        Top = 49
+        Width = 53
+        Height = 15
+        Alignment = taRightJustify
+        Caption = 'Username'
+      end
+      object BSTPassword: TLabel
+        Left = 48
+        Top = 77
+        Width = 50
+        Height = 15
+        Alignment = taRightJustify
+        Caption = 'Password'
+      end
+      object BSTLanguageLabel: TLabel
+        Left = 384
+        Top = 19
+        Width = 55
+        Height = 15
+        Caption = 'IP Address'
+      end
+      object BSTIPEdit: TEdit
+        Left = 104
+        Top = 16
+        Width = 193
+        Height = 23
+        Alignment = taRightJustify
+        TabOrder = 0
+        Text = 'localhost'
+      end
+      object BSTConnect: TButton
+        Left = 216
+        Top = 45
+        Width = 81
+        Height = 52
+        Caption = 'BSTConnect'
+        TabOrder = 1
+        OnClick = BSTConnectClick
+      end
+      object BSTUserEdit: TEdit
+        Left = 104
+        Top = 45
+        Width = 106
+        Height = 23
+        Alignment = taRightJustify
+        TabOrder = 2
+      end
+      object BSTPasswordEdit: TEdit
+        Left = 104
+        Top = 74
+        Width = 106
+        Height = 23
+        Alignment = taRightJustify
+        PasswordChar = '*'
+        TabOrder = 3
+      end
+      object BSTLanguageSelector: TComboBox
+        Left = 384
+        Top = 45
+        Width = 145
+        Height = 23
+        ItemIndex = 0
+        TabOrder = 4
+        Text = 'English'
+        OnChange = BSTLanguageSelectorChange
+        Items.Strings = (
+          'English'
+          'German')
+      end
+    end
+  end
+  object Databind_MainformTitle: TEdit
+    Left = 936
+    Top = 596
+    Width = 121
+    Height = 23
+    TabOrder = 1
+    Text = 'Databind_MainformTitle'
+    Visible = False
+    OnChange = Databind_MainformTitleChange
+  end
+  object Databind_ConnectionError: TEdit
+    Left = 936
+    Top = 596
+    Width = 121
+    Height = 23
+    TabOrder = 2
+    Text = 'Databind_ConnectionError'
+    Visible = False
+  end
+  object Databind_AutoTableGenPrompt: TEdit
+    Left = 936
+    Top = 596
+    Width = 121
+    Height = 23
+    TabOrder = 3
+    Text = 'Databind_AutoTableGenPrompt'
+    Visible = False
   end
   object StoresDataSource: TDataSource
     DataSet = StoresTableClient
@@ -741,6 +850,10 @@ object BillEditor: TBillEditor
     DriverName = 'MySQL'
     LoginPrompt = False
     Params.Strings = (
+      'HostName=ServerName'
+      'Database=DBNAME'
+      'User_Name=user'
+      'Password=password'
       'DriverUnit=Data.DBXMySQL'
       
         'DriverPackageLoader=TDBXDynalinkDriverLoader,DbxCommonDriver280.' +
@@ -762,22 +875,16 @@ object BillEditor: TBillEditor
       'VendorLib=LIBMYSQL.dll'
       'VendorLibWin64=libmysql.dll'
       'VendorLibOsx=libmysqlclient.dylib'
-      'HostName=localhost'
-      'User_Name=delphAcc'
       'MaxBlobSize=-1'
       'LocaleCode=0000'
       'Compressed=False'
       'Encrypted=False'
       'BlobSize=-1'
-      'ErrorResourceFile='
-      'Database=bills'
-      'Password=2004')
-    Connected = True
+      'ErrorResourceFile=')
     Left = 56
     Top = 64
   end
   object StoresTableSelector: TSQLDataSet
-    Active = True
     CommandText = 'SELECT * FROM stores'
     MaxBlobSize = -1
     Params = <>
@@ -791,7 +898,6 @@ object BillEditor: TBillEditor
     Top = 176
   end
   object StoresTableClient: TClientDataSet
-    Active = True
     Aggregates = <>
     IndexFieldNames = 'StoreID'
     Params = <>
@@ -822,7 +928,6 @@ object BillEditor: TBillEditor
     end
   end
   object BillsTableSelector: TSQLDataSet
-    Active = True
     CommandText = 'SELECT * FROM receipts'
     MaxBlobSize = -1
     Params = <>
@@ -836,7 +941,6 @@ object BillEditor: TBillEditor
     Top = 176
   end
   object BillsTableClient: TClientDataSet
-    Active = True
     Aggregates = <>
     IndexFieldNames = 'BillID'
     Params = <>
@@ -853,6 +957,10 @@ object BillEditor: TBillEditor
     object BillsTableClientDate: TDateField
       FieldName = 'Date'
       Required = True
+    end
+    object BillsTableClientGroup: TStringField
+      FieldName = 'Group'
+      Size = 64
     end
     object BillsTableClientPrice: TSingleField
       FieldName = 'Price'
@@ -887,98 +995,33 @@ object BillEditor: TBillEditor
     Left = 304
     Top = 536
   end
-  object ViewSelector: TSQLDataSet
-    CommandText = 'SELECT * FROM receipts_view'
-    MaxBlobSize = -1
-    Params = <>
-    SQLConnection = MySQLConnector
-    Left = 288
-    Top = 120
-  end
-  object ViewProvider: TDataSetProvider
-    DataSet = ViewSelector
-    Left = 288
-    Top = 176
-  end
-  object ViewClient: TClientDataSet
-    Active = True
-    Aggregates = <>
-    IndexFieldNames = 'BillID'
-    Params = <>
-    ProviderName = 'ViewProvider'
-    ReadOnly = True
-    OnNewRecord = BillsTableClientNewRecord
-    Left = 288
-    Top = 232
-    object IntegerField1: TIntegerField
-      DefaultExpression = '-1'
-      FieldName = 'BillID'
-      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
-      Required = True
-    end
-    object DateField1: TDateField
-      FieldName = 'Date'
-      Required = True
-    end
-    object SingleField1: TSingleField
-      FieldName = 'Price'
-      Required = True
-    end
-    object IntegerField2: TIntegerField
-      FieldName = 'StoreID'
-      Required = True
-    end
-    object ViewClientName: TStringField
-      FieldName = 'Name'
-      Required = True
-      Size = 16
-    end
-    object ViewClientLocation: TStringField
-      FieldName = 'Location'
-      Required = True
-      Size = 32
-    end
-    object ViewClientAddress: TStringField
-      FieldName = 'Address'
-      Required = True
-      Size = 64
-    end
-  end
-  object ViewDataSource: TDataSource
-    DataSet = ViewClient
-    Left = 288
-    Top = 288
-  end
   object ViewQuery: TSQLQuery
-    Active = True
-    DataSource = ViewDataSource
     MaxBlobSize = -1
     Params = <>
     SQL.Strings = (
       'SELECT * FROM receipts_view')
     SQLConnection = MySQLConnector
-    Left = 384
+    Left = 272
     Top = 120
   end
   object ViewQueryDataSource: TDataSource
     DataSet = ViewQueryClient
-    Left = 384
+    Left = 272
     Top = 288
   end
   object ViewQueryProvider: TDataSetProvider
     DataSet = ViewQuery
     Options = [poRetainServerOrder, poUseQuoteChar]
-    Left = 384
+    Left = 272
     Top = 176
   end
   object ViewQueryClient: TClientDataSet
-    Active = True
     Aggregates = <>
     Params = <>
     ProviderName = 'ViewQueryProvider'
     ReadOnly = True
     OnNewRecord = BillsTableClientNewRecord
-    Left = 384
+    Left = 272
     Top = 232
     object IntegerField3: TIntegerField
       DefaultExpression = '-1'
@@ -989,6 +1032,12 @@ object BillEditor: TBillEditor
     object DateField2: TDateField
       FieldName = 'Date'
       Required = True
+    end
+    object ViewQueryClientGroup: TStringField
+      FieldKind = fkCalculated
+      FieldName = 'Group'
+      Size = 32
+      Calculated = True
     end
     object SingleField2: TSingleField
       FieldName = 'Price'
@@ -1013,5 +1062,10 @@ object BillEditor: TBillEditor
       Required = True
       Size = 64
     end
+  end
+  object XMLLangDoc: TXMLDocument
+    FileName = 'lang/lng.xml'
+    Left = 472
+    Top = 312
   end
 end

@@ -4,8 +4,8 @@ object DialogChange: TDialogChange
   BorderIcons = [biSystemMenu]
   BorderStyle = bsSingle
   Caption = 'Manual SQL'
-  ClientHeight = 442
-  ClientWidth = 628
+  ClientHeight = 441
+  ClientWidth = 624
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -20,7 +20,7 @@ object DialogChange: TDialogChange
   object Errlbl: TLabel
     Left = 0
     Top = 0
-    Width = 628
+    Width = 624
     Height = 28
     Align = alTop
     Alignment = taCenter
@@ -141,20 +141,20 @@ object DialogChange: TDialogChange
   end
   object pnlBot: TPanel
     Left = 0
-    Top = 401
-    Width = 628
+    Top = 400
+    Width = 624
     Height = 41
     Align = alBottom
     Caption = 'pnlBot'
     ShowCaption = False
     TabOrder = 4
-    ExplicitTop = 400
-    ExplicitWidth = 624
+    ExplicitTop = 399
+    ExplicitWidth = 620
     DesignSize = (
-      628
+      624
       41)
     object BtnOk: TButton
-      Left = 537
+      Left = 525
       Top = 8
       Width = 75
       Height = 25
@@ -162,10 +162,10 @@ object DialogChange: TDialogChange
       Caption = 'Confirm'
       TabOrder = 0
       OnClick = btnClick
-      ExplicitLeft = 533
+      ExplicitLeft = 521
     end
     object btnCancel: TButton
-      Left = 442
+      Left = 430
       Top = 8
       Width = 75
       Height = 25
@@ -173,47 +173,7 @@ object DialogChange: TDialogChange
       Caption = 'Cancel'
       TabOrder = 1
       OnClick = btnClick
-      ExplicitLeft = 438
+      ExplicitLeft = 426
     end
-  end
-  object MySQLConnector: TSQLConnection
-    ConnectionName = 'MySQLConnection'
-    DriverName = 'MySQL'
-    LoginPrompt = False
-    Params.Strings = (
-      'DriverUnit=Data.DBXMySQL'
-      
-        'DriverPackageLoader=TDBXDynalinkDriverLoader,DbxCommonDriver280.' +
-        'bpl'
-      
-        'DriverAssemblyLoader=Borland.Data.TDBXDynalinkDriverLoader,Borla' +
-        'nd.Data.DbxCommonDriver,Version=24.0.0.0,Culture=neutral,PublicK' +
-        'eyToken=91d62ebb5b0d1b1b'
-      
-        'MetaDataPackageLoader=TDBXMySqlMetaDataCommandFactory,DbxMySQLDr' +
-        'iver280.bpl'
-      
-        'MetaDataAssemblyLoader=Borland.Data.TDBXMySqlMetaDataCommandFact' +
-        'ory,Borland.Data.DbxMySQLDriver,Version=24.0.0.0,Culture=neutral' +
-        ',PublicKeyToken=91d62ebb5b0d1b1b'
-      'GetDriverFunc=getSQLDriverMYSQL'
-      'LibraryName=dbxmys.dll'
-      'LibraryNameOsx=libsqlmys.dylib'
-      'VendorLib=LIBMYSQL.dll'
-      'VendorLibWin64=libmysql.dll'
-      'VendorLibOsx=libmysqlclient.dylib'
-      'HostName=localhost'
-      'User_Name=delphAcc'
-      'MaxBlobSize=-1'
-      'LocaleCode=0000'
-      'Compressed=False'
-      'Encrypted=False'
-      'BlobSize=-1'
-      'ErrorResourceFile='
-      'Database=bills'
-      'Password=2004')
-    Connected = True
-    Left = 568
-    Top = 32
   end
 end
