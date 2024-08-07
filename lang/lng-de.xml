@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<German>
+    <store>
+        <SEStoreIDLabel>Geschäfts-ID (intern)</SEStoreIDLabel>
+        <SELocationLabel>Geschäft Ortschaft und PLZ</SELocationLabel>
+        <SENameLabel>Geschäftsname</SENameLabel>
+        <SEAddressLabel>Geschäft Straße</SEAddressLabel>
+        <SEStoreSaveButton>{AMPERSAND}Speichern</SEStoreSaveButton>
+        <SEStoreCancelButton>{AMPERSAND}Abbrechen</SEStoreCancelButton>
+    </store>
+
+    <bills>
+        <BEBillIDLabel>Rechnungs-ID (intern)</BEBillIDLabel>
+        <BENameLabel>Geschäftsname</BENameLabel>
+        <BEAddressLabel>Geschäft Straße</BEAddressLabel>
+        <BELocationLabel>Geschäft Ortschaft</BELocationLabel>
+        <BEPriceLabel>Gesamtpreis</BEPriceLabel>
+        <BEDateLabel>Datum</BEDateLabel>
+        <BEStoreIDRefLabel>Geschäfts-ID</BEStoreIDRefLabel>
+        <BEGroupLabel>Gruppe</BEGroupLabel>
+        <BEBillsSaveButton>{AMPERSAND}Speichern</BEBillsSaveButton>
+        <BEBillsCancelButton>{AMPERSAND}Abbrechen</BEBillsCancelButton>
+    </bills>
+
+    <Databind>
+        <Databind_MainformTitle>Rechnungsbearbeiter</Databind_MainformTitle>
+        <Databind_ConnectionError>Verbindungsfehler, konnte sich nicht mit MySQL-Server verbinden! Grund: %s - %s</Databind_ConnectionError>
+        <Databind_AutoTableGenPrompt>Die Tabelle(n) [%s] fehlt/fehlen. Sollen sie Automatisch erzeugt werden?</Databind_AutoTableGenPrompt>
+    </Databind>
+    <tabs>
+        <BillsEditor>{AMPERSAND}Rechnungsbearbeiter</BillsEditor>
+        <BillsOverview>Rechungsübers{AMPERSAND}icht</BillsOverview>
+        <StoreEditor>Gesc{AMPERSAND}häftsbearbeiter</StoreEditor>
+        <SettingsPage>Einstellun{AMPERSAND}gen</SettingsPage>
+    </tabs>
+
+    <overview>
+        <filter>
+            <QFilterApply>Übernehmen</QFilterApply>
+            <QFilterClear>Zurücksetzen</QFilterClear>
+            <OverviewClearDate>Auswahl Datum zurücksetzen</OverviewClearDate>
+        </filter>
+
+        <sum>
+            <SumLabel>Summe in Auswahl:</SumLabel>
+            <SumLabelDiff>Differenz oberhalb:</SumLabelDiff>
+            <SumCopyDown>Kopieren</SumCopyDown>
+        </sum>
+    </overview>
+
+    <settings>
+        <IP>
+            <BSTIPLabel>IP Addresse</BSTIPLabel>
+            <BSTUserLabel>Benutzername</BSTUserLabel>
+            <BSTConnect>Verbinden|Trennen</BSTConnect>
+            <BSTPassword>Passwort</BSTPassword>
+        </IP>
+        <lng>
+           <BSTLanguageLabel>Sprache auswählen</BSTLanguageLabel>
+        </lng>
+    </settings>
+</German>

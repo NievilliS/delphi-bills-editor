@@ -19,7 +19,6 @@ type
     pnlBot: TPanel;
     BtnOk: TButton;
     btnCancel: TButton;
-    MySQLConnector: TSQLConnection;
     UpdateLbl: TLabel;
     UpdateWhereLbl: TLabel;
     UpdateNB: TNumberBox;
@@ -36,13 +35,15 @@ type
     { Private declarations }
 
     fList: TList<TPanel>;
+    fConnected: Boolean;
 
     function GetOperation: string;
     function GetTable: string;
     function GetTableID: string;
     function ByFieldID(const aFieldName: string): TControl;
-
+    procedure SetConnected(const aConnected: Boolean);
   public
+    property Connected: Boolean read fConnected write SetConnected;
     { Public declarations }
   end;
 
@@ -64,7 +65,7 @@ begin
   begin
     var LQ: TSQLQuery := TSQLQuery.Create(nil);
     try
-      LQ.SQLConnection := MySQLConnector;
+      LQ.SQLConnection := uniFrmMain.BillEditor.MySQLConnector;
 
       LQ.SQL.Text := GetOperation + GetTable;
 
@@ -170,12 +171,25 @@ begin
   end;
 end;
 
+procedure TDialogChange.SetConnected(const aConnected: Boolean);
+begin
+  if aConnected <> fConnected then
+  begin
+    fConnected := aConnected;
+
+    if fConnected then
+      TableStatementChange(Self);
+  end;
+end;
+
 procedure TDialogChange.TableStatementChange(Sender: TObject);
 var
   LQ: TSQLQuery;
   f: TField;
   start_index: Integer;
 begin
+  if not fConnected then exit;
+
   // Update labels
   DelLabel.Caption := DelLabel.Hint.Replace('<table_id_key>', GetTableID);
   UpdateWhereLbl.Caption := UpdateWhereLbl.Hint.Replace('<table_id_key>', GetTableID);
@@ -192,7 +206,7 @@ begin
   // Get Elements
   LQ := TSQLQuery.Create(nil);
   try
-    LQ.SQLConnection := MySQLConnector;
+    LQ.SQLConnection := uniFrmMain.BillEditor.MySQLConnector;
     LQ.SQL.Text := 'SELECT * FROM ' + GetTable + ' LIMIT 1';
     LQ.Open;
 
@@ -252,7 +266,7 @@ begin
   LQ := TSQLQuery.Create(nil);
 
   try
-    LQ.SQLConnection := MySQLConnector;
+    LQ.SQLConnection := uniFrmMain.BillEditor.MySQLConnector;
     LQ.SQL.Text := 'SELECT * FROM ' + GetTable + 'WHERE ' + GetTableID + '= ' + UpdateNB.ValueInt.ToString;
     LQ.Open;
 
@@ -297,6 +311,7 @@ begin
   DeleteContents.Align := alBottom;
   UpdateContents.Height := _h;
   DeleteContents.Height := _h;
+  fConnected := False;
 
   TableStatementChange(TableStatement);
 end;

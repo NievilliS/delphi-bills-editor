@@ -3,7 +3,9 @@ program BillEdit;
 uses
   Vcl.Forms,
   uniFrmMain in 'uniFrmMain.pas' {BillEditor},
-  uniFrmManualChange in 'uniFrmManualChange.pas' {DialogChange};
+  uniFrmManualChange in 'uniFrmManualChange.pas' {DialogChange},
+  uniSettingsMgr in 'uniSettingsMgr.pas',
+  uniLangManager in 'uniLangManager.pas';
 
 {$R *.res}
 

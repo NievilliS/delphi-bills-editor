@@ -9,7 +9,8 @@ uses
   Data.DBXMySQL, Datasnap.DBClient, Datasnap.Provider, Vcl.Mask, Vcl.ComCtrls,
   Vcl.WinXPanels, Data.Bind.EngExt, Vcl.Bind.DBEngExt, System.Rtti,
   System.Bindings.Outputs, Vcl.Bind.Editors, Data.Bind.Components,
-  Data.Bind.DBScope, Data.Win.ADODB, Vcl.DBCGrids;
+  Data.Bind.DBScope, Data.Win.ADODB, Vcl.DBCGrids, Xml.xmldom, Xml.XMLIntf,
+  Xml.XMLDoc, uniLangManager;
 
 type
   TBillEditor = class(TForm)
@@ -78,17 +79,6 @@ type
     BindSourceDB1: TBindSourceDB;
     LinkControlToFieldDate: TLinkControlToField;
     ViewDBGrid: TDBGrid;
-    ViewSelector: TSQLDataSet;
-    ViewProvider: TDataSetProvider;
-    ViewClient: TClientDataSet;
-    IntegerField1: TIntegerField;
-    DateField1: TDateField;
-    SingleField1: TSingleField;
-    IntegerField2: TIntegerField;
-    ViewDataSource: TDataSource;
-    ViewClientName: TStringField;
-    ViewClientLocation: TStringField;
-    ViewClientAddress: TStringField;
     ViewQuery: TSQLQuery;
     ViewQueryDataSource: TDataSource;
     ViewQueryProvider: TDataSetProvider;
@@ -114,6 +104,24 @@ type
     SumValueDiff: TLabel;
     btnDebugFallback: TButton;
     DebugVisiToggler: TPanel;
+    SettingsPage: TTabSheet;
+    BSTIPEdit: TEdit;
+    BSTIPLabel: TLabel;
+    XMLLangDoc: TXMLDocument;
+    Databind_MainformTitle: TEdit;
+    BSTConnect: TButton;
+    BSTUserLabel: TLabel;
+    BSTUserEdit: TEdit;
+    BSTPassword: TLabel;
+    BSTPasswordEdit: TEdit;
+    Databind_ConnectionError: TEdit;
+    BEGroupEdit: TDBEdit;
+    BEGroupLabel: TLabel;
+    BillsTableClientGroup: TStringField;
+    ViewQueryClientGroup: TStringField;
+    Databind_AutoTableGenPrompt: TEdit;
+    BSTLanguageSelector: TComboBox;
+    BSTLanguageLabel: TLabel;
     procedure BEBillsSaveButtonClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -129,16 +137,28 @@ type
     procedure SumCopyDownClick(Sender: TObject);
     procedure btnDebugFallbackClick(Sender: TObject);
     procedure DebugVisiTogglerDblClick(Sender: TObject);
+    procedure Databind_MainformTitleChange(Sender: TObject);
+    procedure BSTConnectClick(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure BSTLanguageSelectorChange(Sender: TObject);
   protected
     MinusCounter: Integer;
     QueryEdit: string;
     OrderStr: string;
     OrderState: Integer;
     PrevDateSelect: TDate;
+    LangMgr: TLangManager;
+    fConnected: Boolean;
 
+    procedure SetConnected(const aConnected: Boolean);
     procedure UpdateQuery;
     function GetSumOfPrices: Double;
     procedure UpdateSumDiff;
+    function LangToString(const ALangIndex: Integer): string;
+
+    procedure SetUpDatabase;
+
+    property Connected: Boolean read fConnected write SetConnected;
     { Private declarations }
   public
     { Public declarations }
@@ -150,6 +170,7 @@ var
 
 resourcestring
   { General SQL Query Resources }
+  RS_DB_Name = 'bills_fake';
   RS_BE_TableName = 'receipts';
   RS_SE_TableName = 'stores';
   RS_View_ViewName = 'receipts_view';
@@ -174,6 +195,7 @@ resourcestring
   RS_BESD_NameFieldName = 'Name';
   RS_BESD_LocationFieldName = 'Location';
   RS_BESD_AddressFieldName = 'Address';
+  RS_BESD_GroupFieldName = 'Group';
   RS_BE_BillIDFieldName = 'BillID';
   RS_BE_DateFieldName = 'Date';
   RS_BE_StoreIDRefFieldName = 'StoreID';
@@ -183,10 +205,34 @@ resourcestring
   RS_CHAR_ArrowUp = '↑';
   RS_OrderDefault = 'BillID';
 
+  { AUTO-GENERATION OF TABLES }
+  RS_CREATE_RECEIPTS = 'CREATE TABLE `receipts` ( ' +
+                       '`BillID` int(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT, ' +
+                       '`Date` date NOT NULL, ' +
+                       '`StoreID` int(10) UNSIGNED NOT NULL, ' +
+                       '`Price` float NOT NULL, ' +
+                       '`Group` varchar(32) DEFAULT NULL); ';
+  RS_CREATE_RECEIPTS_KEYS = 'ALTER TABLE `receipts` ' +
+                            'ADD KEY `store_FK_1` (`StoreID`); ';
+  RS_CREATE_RECEIPTS_FK_LINK = 'ALTER TABLE `receipts` ' +
+                               'ADD CONSTRAINT `store_FK_1` FOREIGN KEY (`StoreID`) REFERENCES `stores` (`StoreID`); ';
+  RS_CREATE_STORES = 'CREATE TABLE `stores` ( ' +
+                     '`StoreID` int(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT, ' +
+                     '`Name` varchar(24) NOT NULL, ' +
+                     '`Location` varchar(50) NOT NULL, ' +
+                     '`Address` varchar(80) NOT NULL); ';
+  RS_CREATE_STORES_ETC = 'INSERT INTO `stores` (`StoreID`, `Name`, `Location`, `Address`) VALUES (0, ''Etc'', ''-'', ''-''); ';
+  RS_CREATE_RECEIPTS_VIEW = 'CREATE VIEW `receipts_view`  AS SELECT ' +
+                            '`r`.`BillID` AS `BillID`, `r`.`Date` AS `Date`, `r`.`Price` AS `Price`, `s`.`StoreID` AS `StoreID`, ' +
+                            '`s`.`Name` AS `Name`, `s`.`Location` AS `Location`, `s`.`Address` AS `Address` ' +
+                            'FROM (`receipts` `r` join `stores` `s` on(`s`.`StoreID` = `r`.`StoreID`)); ';
+  RS_CREATE_FILTERED_VIEW = 'CREATE VIEW `filtered_view` AS SELECT * FROM `receipts_view`; ';
+  RS_CREATE_COMMIT = 'COMMIT;';
+
 implementation
 
 uses
-  ActiveX, Math, uniFrmManualChange;
+  ActiveX, Math, uniFrmManualChange, System.StrUtils;
 
 {$R *.dfm}
 
@@ -233,9 +279,43 @@ begin
   DataSet.FieldByName(RS_BE_DateFieldName).Value := Trunc(Now);
 end;
 
+procedure TBillEditor.BSTConnectClick(Sender: TObject);
+begin
+  Connected := not Connected;
+end;
+
+procedure TBillEditor.BSTLanguageSelectorChange(Sender: TObject);
+begin
+  LangMgr.ActiveLang := BSTLanguageSelector.ItemIndex;
+  if fConnected then
+  begin
+    try
+      BSTConnect.Caption := SplitString(BSTConnect.Hint, '|')[1];
+    except
+      BSTConnect.Caption := BSTConnect.Hint;
+    end;
+  end
+  else
+    BSTConnect.Caption := SplitString(BSTConnect.Hint, '|')[0];
+end;
+
 procedure TBillEditor.btnDebugFallbackClick(Sender: TObject);
 begin
   DialogChange.Show;
+end;
+
+procedure TBillEditor.Button1Click(Sender: TObject);
+begin
+  if fConnected then
+  begin
+    ShowMessage('Manu setting up');
+    SetUpDatabase;
+  end;
+end;
+
+procedure TBillEditor.Databind_MainformTitleChange(Sender: TObject);
+begin
+  Caption := Databind_MainformTitle.Text;
 end;
 
 procedure TBillEditor.DebugVisiTogglerDblClick(Sender: TObject);
@@ -292,6 +372,14 @@ begin
   end;
 end;
 
+function TBillEditor.LangToString(const ALangIndex: Integer): string;
+begin
+  case ALangIndex of
+    1: Exit('German');
+  end;
+  Result := 'Fallback';
+end;
+
 procedure TBillEditor.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   CoUninitialize;
@@ -300,6 +388,13 @@ end;
 procedure TBillEditor.FormCreate(Sender: TObject);
 begin
   CoInitialize(nil);
+  XMLLangDoc.Active := True;
+  LangMgr := TLangManager.Create(@XMLLangDoc, @Self);
+  LangMgr.LangToString := LangToString;
+  LangMgr.ActiveLang := LangMgr.Fallback;
+
+  fConnected := True;
+  Connected := False;
   MinusCounter := -1;
   OverviewDateClick(OverviewClearDate);
   MonthCalendar1.Date := Trunc(Now);
@@ -352,6 +447,162 @@ begin
 end;
 
 
+procedure TBillEditor.SetConnected(const aConnected: Boolean);
+var
+  _Ctrl: TControl;
+begin
+  if fConnected <> aConnected then
+  begin
+    fConnected := aConnected;
+    try
+      if fConnected then
+      begin
+        MySQLConnector.Params.Values['HostName'] := BSTIPEdit.Text;
+        MySQLConnector.Params.Values['User_Name'] := BSTUserEdit.Text;
+        MySQLConnector.Params.Values['Password'] := BSTPasswordEdit.Text;
+        MySQLConnector.Params.Values['Database'] := RS_DB_Name;
+      end
+      else if Assigned(uniFrmManualChange.DialogChange) then
+      begin
+        uniFrmManualChange.DialogChange.Close;
+        uniFrmManualChange.DialogChange.Connected := fConnected;
+      end;
+      MySQLConnector.Connected := fConnected;
+    except on e: Exception do begin
+      ShowMessage(Format(Databind_ConnectionError.Text, [e.ClassType.ClassName, e.ToString]));
+      fConnected := False;
+    end; end;
+
+
+    // Give Bills Dialog
+    if fConnected then
+      SetUpDatabase;
+
+    // set the enable state of every element
+    for _Ctrl in [
+      QueryFilterEdit, QFilterApply, QFilterClear, OverviewClearDate, MonthCalendar1,
+      DBNavigator1, BEBillsSaveButton, BEBillsCancelButton, BEBillIDEdit, BEStoreIDRefEdit, BEPriceEdit, BEDateTimePicker, btnDebugFallback,
+      SEStoreNavigator, SEStoreIDEdit, SENameEdit, SEAddressEdit, SELocationEdit, SEStoreCancelButton, SEStoreSaveButton
+    ] do
+      _Ctrl.Enabled := fConnected;
+
+    // Set query and table selectors
+    BillsTableSelector.Active := fConnected;
+    StoresTableSelector.Active := fConnected;
+    ViewQuery.Active := fConnected;
+    StoresTableClient.Active := fConnected;
+    BillsTableClient.Active := fConnected;
+    ViewQueryClient.Active := fConnected;
+
+    if fConnected then
+    begin
+      try
+        BSTConnect.Caption := SplitString(BSTConnect.Hint, '|')[1];
+      except
+        BSTConnect.Caption := BSTConnect.Hint;
+      end;
+      OverviewDateClick(OverviewClearDate);
+    end
+    else
+      BSTConnect.Caption := SplitString(BSTConnect.Hint, '|')[0];
+  end;
+end;
+
+procedure TBillEditor.SetUpDatabase;
+
+  function CheckException(AQ: TSQLQuery; const aSql: string): Boolean;
+  begin
+    try
+      AQ.SQL.Text := aSql;
+      AQ.Open;
+      AQ.Close;
+    except
+      Exit(False);
+    end;
+    Result := True;
+  end;
+
+  procedure DoSQL(AQ: TSQLQuery; const aSql: string);
+  begin
+    try
+      AQ.SQL.Text := aSql;
+      AQ.Open;
+      AQ.Close;
+    except
+    end;
+  end;
+
+const
+  _TBLMX = 3;
+  _TABLES: array[0.._TBLMX] of string = ('receipts', 'stores', 'receipts_view', 'filtered_view');
+var
+  LQ: TSQLQuery;
+  _TablesExist: array[0.._TBLMX] of Boolean;
+  i: Integer;
+  _TmpBool: Boolean;
+  _TmpStr: string;
+begin
+  if not fConnected then exit;
+
+  LQ := TSQLQuery.Create(nil);
+  _TmpBool := True;
+  _TmpStr := '';
+
+  try
+    LQ.SQLConnection := MySQLConnector; //< Already set to Database. Unfortunately it does not seem like you can create the database in this here.
+    for i := 0 to _TBLMX do //< Check if any of the Tables/View are missing
+    begin
+      _TablesExist[i] := CheckException(LQ, RS_Q_SelectAllFrom_ + _TABLES[i] + ' LIMIT 1');
+      _TmpBool := _TmpBool and _TablesExist[i];
+    end;
+
+    if _TmpBool then exit;
+
+    for i := 0 to _TBLMX do
+      if not _TablesExist[i] then
+        _TmpStr := _TmpStr + _TABLES[i] + ', ';
+
+    if Vcl.Dialogs.MessageDlg(Format(Databind_AutoTableGenPrompt.Text, [_TmpStr]), TMsgDlgType.mtConfirmation, [TMsgDlgBtn.mbYes, TMsgDlgBtn.mbNo], 0, TMsgDlgBtn.mbYes) = mrYes then
+    begin
+      if not _TablesExist[0] then
+      begin
+        DoSQL(LQ, RS_CREATE_RECEIPTS);
+        DoSQL(LQ, RS_CREATE_RECEIPTS_KEYS);
+      end;
+
+      if not _TablesExist[1] then
+      begin
+        DoSQL(LQ, RS_CREATE_STORES);
+        DoSQL(LQ, RS_CREATE_STORES_ETC);
+      end;
+
+      if not _TablesExist[0] then //< This must be done after!
+      begin
+        DoSQL(LQ, RS_CREATE_RECEIPTS_FK_LINK);
+      end;
+
+      if not _TablesExist[2] then
+      begin
+        DoSQL(LQ, RS_CREATE_RECEIPTS_VIEW);
+      end;
+
+      if not _TablesExist[3] then
+      begin
+        DoSQL(LQ, RS_CREATE_FILTERED_VIEW);
+      end;
+
+      DoSQL(LQ, RS_CREATE_COMMIT);
+
+      // Now check once more!
+      for i := 0 to _TBLMX do
+        if not CheckException(LQ, RS_Q_SelectAllFrom_ + _TABLES[i] + ' LIMIT 1') then
+          ShowMessage('Failed to create ' + _TABLES[i]);
+    end;
+  finally
+    LQ.Free;
+  end;
+end;
+
 procedure TBillEditor.SumCopyDownClick(Sender: TObject);
 begin
   SumValue2.Caption := SumValue1.Caption;
@@ -372,6 +623,9 @@ procedure TBillEditor.UpdateQuery;
 var
   _para: TParam;
 begin
+  if not fConnected then exit;
+
+
   ViewQuery.Params.ClearAndResetID;
   ViewQuery.ParamCheck := True;
   ViewQuery.SQL.Text := RS_Q_AlterView_ + RS_View_FilterName + RS_Q_As_ + RS_Q_SelectAllFrom_ + RS_View_ViewName;
