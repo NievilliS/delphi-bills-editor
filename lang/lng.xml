@@ -1,0 +1,107 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<lang>
+    <imports>
+        <German>lang/lng-de.xml</German>
+    </imports>
+
+    <list>
+        Databind.Databind_MainformTitle:Text;
+        Databind.Databind_ConnectionError:Text;
+        Databind.Databind_AutoTableGenPrompt:Text;
+        overview.filter.QFilterApply:Caption;
+        overview.filter.QFilterClear:Caption;
+        overview.filter.OverviewClearDate:Caption;
+        overview.sum.SumLabel:Caption;
+        overview.sum.SumLabelDiff:Caption;
+        overview.sum.SumCopyDown:Caption;
+        tabs.BillsEditor:Caption;
+        tabs.BillsOverview:Caption;
+        tabs.StoreEditor:Caption;
+        tabs.SettingsPage:Caption;
+        settings.IP.BSTIPLabel:Caption;
+        settings.IP.BSTUserLabel:Caption;
+        settings.IP.BSTPassword:Caption;
+        settings.IP.BSTConnect:Hint;
+        settings.lng.BSTLanguageLabel:Caption;
+        bills.BEBillIDLabel:Caption;
+        bills.BENameLabel:Caption;
+        bills.BEAddressLabel:Caption;
+        bills.BELocationLabel:Caption;
+        bills.BEPriceLabel:Caption;
+        bills.BEDateLabel:Caption;
+        bills.BEStoreIDRefLabel:Caption;
+        bills.BEGroupLabel:Caption;
+        bills.BEBillsSaveButton:Caption;
+        bills.BEBillsCancelButton:Caption;
+        store.SEStoreIDLabel:Caption;
+        store.SELocationLabel:Caption;
+        store.SENameLabel:Caption;
+        store.SEAddressLabel:Caption;
+        store.SEStoreSaveButton:Caption;
+        store.SEStoreCancelButton:Caption
+    </list>
+
+    <index>
+        <Fallback>
+            <store>
+                <SEStoreIDLabel>Store ID (internal)</SEStoreIDLabel>
+                <SELocationLabel>Store Location and Postal Code</SELocationLabel>
+                <SENameLabel>Store Name</SENameLabel>
+                <SEAddressLabel>Store Street Address</SEAddressLabel>
+                <SEStoreSaveButton>{AMPERSAND}Save</SEStoreSaveButton>
+                <SEStoreCancelButton>{AMPERSAND}Cancel</SEStoreCancelButton>
+            </store>
+
+            <bills>
+                <BEBillIDLabel>Bill ID (internal)</BEBillIDLabel>
+                <BENameLabel>Store Name</BENameLabel>
+                <BEAddressLabel>Store Street Address</BEAddressLabel>
+                <BELocationLabel>Store Address</BELocationLabel>
+                <BEPriceLabel>Total Price</BEPriceLabel>
+                <BEDateLabel>Date</BEDateLabel>
+                <BEStoreIDRefLabel>Store ID</BEStoreIDRefLabel>
+                <BEGroupLabel>Group</BEGroupLabel>
+                <BEBillsSaveButton>{AMPERSAND}Save</BEBillsSaveButton>
+                <BEBillsCancelButton>{AMPERSAND}Cancel</BEBillsCancelButton>
+            </bills>
+
+            <Databind>
+                <Databind_MainformTitle>Bills Editor</Databind_MainformTitle>
+                <Databind_ConnectionError>Connection Error, Could not connect to MySQL Server! Reason: %s - %s</Databind_ConnectionError>
+                <Databind_AutoTableGenPrompt>The Table(s) [%s] is/are missing. Auto-Generate Them?</Databind_AutoTableGenPrompt>
+            </Databind>
+            <tabs>
+                <BillsEditor>{AMPERSAND}Bills Editor</BillsEditor>
+                <BillsOverview>Bills Over{AMPERSAND}view</BillsOverview>
+                <StoreEditor>S{AMPERSAND}tore Editor</StoreEditor>
+                <SettingsPage>Settin{AMPERSAND}gs Page</SettingsPage>
+            </tabs>
+
+            <overview>
+                <filter>
+                    <QFilterApply>Apply Filter</QFilterApply>
+                    <QFilterClear>Clear Filter</QFilterClear>
+                    <OverviewClearDate>Clear Date Selection</OverviewClearDate>
+                </filter>
+
+                <sum>
+                    <SumLabel>Sum in Selection:</SumLabel>
+                    <SumLabelDiff>Difference above:</SumLabelDiff>
+                    <SumCopyDown>Copy Down</SumCopyDown>
+                </sum>
+            </overview>
+
+            <settings>
+                <IP>
+                    <BSTIPLabel>IP Address</BSTIPLabel>
+                    <BSTUserLabel>Username</BSTUserLabel>
+                    <BSTConnect>Connect|Disconnect</BSTConnect>
+                    <BSTPassword>Password</BSTPassword>
+                </IP>
+                <lng>
+                    <BSTLanguageLabel>Select Language</BSTLanguageLabel>
+                </lng>
+            </settings>
+        </Fallback>
+    </index>
+</lang>
