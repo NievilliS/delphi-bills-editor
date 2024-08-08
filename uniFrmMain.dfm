@@ -57,6 +57,7 @@ object BillEditor: TBillEditor
         ParentFont = False
         ShowCaption = False
         TabOrder = 1
+        ExplicitWidth = 950
         DesignSize = (
           954
           257)
@@ -136,6 +137,7 @@ object BillEditor: TBillEditor
           Date = 45432.000000000000000000
           TabOrder = 0
           OnClick = OverviewDateClick
+          ExplicitLeft = 718
         end
         object OverviewClearDate: TButton
           Left = 722
@@ -152,6 +154,7 @@ object BillEditor: TBillEditor
           ParentFont = False
           TabOrder = 1
           OnClick = OverviewDateClick
+          ExplicitLeft = 718
         end
         object QueryFilterEdit: TEdit
           Left = 16
@@ -168,6 +171,7 @@ object BillEditor: TBillEditor
           TabOrder = 2
           TextHint = 'Price > 10 AND Name = "Spar"'
           OnKeyPress = QueryFilterEditKeyPress
+          ExplicitWidth = 678
         end
         object QFilterApply: TButton
           Left = 16
