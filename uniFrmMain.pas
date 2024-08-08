@@ -170,7 +170,7 @@ var
 
 resourcestring
   { General SQL Query Resources }
-  RS_DB_Name = 'bills_fake';
+  RS_DB_Name = 'bills';
   RS_BE_TableName = 'receipts';
   RS_SE_TableName = 'stores';
   RS_View_ViewName = 'receipts_view';
@@ -232,7 +232,7 @@ resourcestring
 implementation
 
 uses
-  ActiveX, Math, uniFrmManualChange, System.StrUtils;
+  ActiveX, Math, uniFrmManualChange, System.StrUtils, System.UITypes;
 
 {$R *.dfm}
 

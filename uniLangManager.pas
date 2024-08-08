@@ -65,7 +65,7 @@ type
 
   public
     constructor Create(APXML: PXMLDocument; AForm: PForm);
-    destructor Destroy;
+    destructor Destroy; override;
 
     procedure UpdateLanguage;
     function GetTranslatedString(const APath: string; AUseFallback: Boolean = False): string;
@@ -262,8 +262,8 @@ begin
 
   //! List all lang files stated by Import node.
   //! Import those nodes and put them into Index node.
+  LIXMLImporter := TXMLDocument.Create(FPXMLDoc^);
   try
-    LIXMLImporter := TXMLDocument.Create(FPXMLDoc^);
     try
       for var I: Integer := 0 to LImports.ChildNodes.Count - 1 do
       begin
